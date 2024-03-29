@@ -17,12 +17,12 @@ func GetIdfile(ptrflag string, value string, description string) (*string, *stri
 	flag.Parse()
 	return src, dst
 }
-func ReadAllfile(name string) []byte {
+func ReadAllfile(name string) *[]byte {
 	f, err := os.ReadFile(name)
 	if err != nil {
 		log.Fatalf("Error reading file...!%v", err)
 	}
-	return f
+	return &f
 }
 func CreateFile(Newfile string) {
 	f, err := os.Create(Newfile)
@@ -39,7 +39,7 @@ func CreateFile(Newfile string) {
 
 func GetRequest(src *string, dst string) {
 	bytes := ReadAllfile(*src)
-	lines := strings.Split(string(bytes), "\n")
+	lines := strings.Split(string(*bytes), "\n")
 
 	for _, item := range lines {
 		response, err := http.Get(item)
