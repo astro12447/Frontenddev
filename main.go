@@ -11,12 +11,6 @@ import (
 	"time"
 )
 
-func GetIdfile(ptrflag string, value string, description string) (*string, *string) {
-	src := flag.String(ptrflag, value, description)
-	dst := flag.String(ptrflag, value, description)
-	flag.Parse()
-	return src, dst
-}
 func ReadAllfile(name string) *[]byte {
 	f, err := os.ReadFile(name)
 	if err != nil {
@@ -24,34 +18,32 @@ func ReadAllfile(name string) *[]byte {
 	}
 	return &f
 }
-func CreateFile(Newfile string) {
-	f, err := os.Create(Newfile)
+func CreateFile(Newfile *string) *os.File {
+	f, err := os.Create(*Newfile)
 	if err != nil {
 		log.Fatalf("%v", f)
 	}
-	defer f.Close()
-	fmt.Print("file was created...!")
+	fmt.Println("file was created...!", f)
+	return f
 }
 
 // func IsUrl(pathName string) bool {
 
 // }
 
-func GetRequest(src *string, dst string) {
-	bytes := ReadAllfile(*src)
+func GetRequest(src string, dst string) {
+	bytes := ReadAllfile(src)
 	lines := strings.Split(string(*bytes), "\n")
 
 	for _, item := range lines {
 		response, err := http.Get(item)
 		if err != nil {
-			panic(err)
+			continue
 		}
 		defer response.Body.Close()
 		body, err := io.ReadAll(response.Body)
-		google, err := os.Create(*&dst)
-		if err != nil {
-			panic(err)
-		}
+		google := CreateFile(&dst)
+
 		defer google.Close()
 		r, err := google.WriteString(string(body))
 		if err != nil {
