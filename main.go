@@ -23,7 +23,7 @@ func CreateFile(Newfile *string) *os.File {
 	if err != nil {
 		log.Fatalf("%v", f)
 	}
-	fmt.Println("file was created...!", f)
+	fmt.Println("file was created...!\n", f.Name())
 	return f
 }
 
@@ -62,7 +62,7 @@ func main() {
 	f2 := flag.String("dst", "", "")
 	start := time.Now()
 	flag.Parse()
-	GetRequest(f1, *f2)
+	GetRequest(*f1, *f2)
 	end := time.Now()
 	elapse := end.Sub(start)
 	fmt.Println("Duration time elapse:", elapse)
